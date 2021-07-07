@@ -1,0 +1,100 @@
+{% extends "base4.html" %}
+{% block title %}Singapore Airlines - Admin Home{% endblock %}
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+    <h1 class="display-4">{{g.user}}'s Profile</h1>
+    {% for employee in employees_list %}
+    <div style="margin-top:20px; color: #1a202c; text-align: left; padding: 15px;">
+        <div class="row gutters-sm" style="margin-right: -8px; margin-left: -8px;">
+            <div class="col-md-4 mb-3" style="margin-bottom: 1rem!important;">
+                <div class="card"
+                     style="box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 0 solid rgba(0,0,0,.125); border-radius: .25rem;">
+                    <div class="card-body" style="flex: 1 1 auto; min-height: 1px; padding: 1rem;">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="{{employee.get_photo()}}" style="width: 70%; height: 70%;">
+                            <div class="mt-3">
+                                <h4>{{employee.get_first_name()}} {{employee.get_last_name()}}</h4>
+                                {% if employee.get_employment_status() == "E" %}
+                                <p class="text-secondary mb-1">Employed</p>
+                                {% elif employee.get_employment_status() == "R" %}
+                                <p class="text-secondary mb-1">Retrenched</p>
+                                {% elif employee.get_employment_status() == "Resigned" %}
+                                <p class="text-secondary mb-1">Resigned</p>
+                                {% endif %}
+
+                                {% if employee.get_role() == "C" %}
+                                <p class="text-muted font-size-sm">Crew</p>
+                                {% elif employee.get_role() == "A" %}
+                                <p class="text-muted font-size-sm">Admin</p>
+                                {% elif employee.get_role() == "M" %}
+                                <p class="text-muted font-size-sm">Maintenance</p>
+                                {% elif employee.get_role() == "F" %}
+                                <p class="text-muted font-size-sm">Flights</p>
+                                {% elif employee.get_role() == "D" %}
+                                <p class="text-muted font-size-sm">Declaration</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3"
+                     style="margin-bottom: 1rem!important; box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 0 solid rgba(0,0,0,.125); border-radius: .25rem;">
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card mb-3"
+                     style="margin-bottom: 1rem!important; box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06); position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 0 solid rgba(0,0,0,.125); border-radius: .25rem; ">
+                    <div class="card-body" style="flex: 1 1 auto; min-height: 1px; padding: 1rem;">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{employee.get_first_name()}} {{employee.get_last_name()}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{employee.get_email()}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Mobile Contact</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{employee.get_mobile_contact()}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Home Contact</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{employee.get_home_contact()}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Address</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                {{employee.get_address()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}

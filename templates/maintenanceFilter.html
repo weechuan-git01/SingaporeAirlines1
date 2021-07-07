@@ -1,0 +1,190 @@
+{% extends "base2.html" %}
+{% block title %}Singapore Airlines - Match Employees Employees{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<h1 class="display-4">Match Employees</h1>
+<div>
+  <form method="POST" action="">
+      <div data-validate = "Question is required">
+          {{ render_field(form.filter, class="form-control") }}
+      </div>
+      <input type="submit" value="Submit" class="btn btn-primary"/>
+   </form>
+</div>
+<div>
+    {% if count == 0 %}
+    <p>There are no employees.</p>
+    {% elif count == 1 %}
+    <p>There is 1 employee.</p>
+    {% else %}
+    <p>There are {{ count }} employees.</p>
+    {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Employee No.</th>
+        <th>Position</th>
+        <th>Year of Service</th>
+        <th>Employment Status</th>
+        <th>No. of Matches</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employee in maintenance_list %}
+      <tr>
+        <td>{{ employee.get_first_name() }} {{ employee.get_last_name() }}</td>
+        <td>{{ employee.get_employee_id() }}</td>
+
+        {% if employee.get_role() == "C" %}
+        <td>Crew</td>
+        {% elif employee.get_role() == "A" %}
+        <td>Admin</td>
+        {% elif employee.get_role() == "M" %}
+        <td>Maintenance</td>
+        {% elif employee.get_role() == "F" %}
+        <td>Flights</td>
+        {% elif employee.get_role() == "D" %}
+        <td>Declaration</td>
+        {% endif %}
+
+        <td>{{ employee.get_year_of_service() }}</td>
+
+        {% if employee.get_employment_status() == "E" %}
+        <td style="color:green; font-weight:bold">Employed</td>
+        {% elif employee.get_employment_status() == "R" %}
+        <td style="color:orange; font-weight:bold">Retrenched</td>
+        {% elif employee.get_employment_status() == "Resigned" %}
+        <td style="color:red; font-weight:bold">Resigned</td>
+        {% endif %}
+
+        <td>{{employee.get_no_of_matches()}}</td>
+<td>
+    <form>
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal__{{employee.get_employee_id()}}">
+      Details
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal__{{employee.get_employee_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">{{employee.get_first_name()}} {{employee.get_last_name()}}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+              <h3>Personal Particulars</h3>
+              <p><img src="{{employee.get_photo()}}"></p>
+              <span>Name: {{employee.get_first_name()}} {{employee.get_last_name()}}</span><br>
+              <span>ID: {{employee.get_employee_id()}}</span><br>
+              <span>Birthdate: {{employee.get_birthdate()}}</span><br>
+              <span>Gender: {{employee.get_gender()}}</span><br>
+              <span>Nationality: {{employee.get_nationality()}}</span><br>
+
+              <h3>Work Experience</h3>
+                {% if employee.get_role() == "E" %}
+                <span>Role: Employee</span><br>
+                {% elif employee.get_role() == "A" %}
+                <span>Role: Admin</span><br>
+                {% elif employee.get_role() == "M" %}
+                <span>Role: Maintenance</span><br>
+                {% elif employee.get_role() == "F" %}
+                <span>Role: Flights</span><br>
+                {% elif employee.get_role() == "D" %}
+                <span>Role: Declaration</span><br>
+                {% endif %}
+              {% if employee.get_employment_status() == "R" %}
+              <span>Employment: Retrenched</span><br>
+              {% elif employee.get_employment_status() == "E" %}
+              <span>Employment: Employed</span><br>
+              {% elif employee.get_employment_status() == "Resigned" %}
+              <span>Employment: Resigned</span><br>
+              {% endif %}
+
+              <span>Job Start Date: {{employee.get_job_start_date()}}</span><br>
+
+              {% if employee.get_employment_status() == "R" %}
+              <span>Job End Date: {{employee.get_job_end_date()}}</span><br>
+              {% elif employee.get_employment_status() == "E" %}
+              <span></span><br>
+              {% elif employee.get_employment_status() == "Resigned" %}
+              <span></span><br>
+              {% endif %}
+
+              <h3>Education</h3>
+              <span>Level of Education: {{employee.get_level_of_education()}}</span><br>
+              <span>Major: {{employee.get_major()}}</span><br>
+              <span>School: {{employee.get_school()}}</span><br>
+              <span>Graduation Date: {{employee.get_graduation_date()}}</span><br>
+
+              <h3>Contact Details</h3>
+              <span>Address: {{employee.get_address()}}</span><br>
+              <span>Mobile Contact: {{employee.get_mobile_contact()}}</span><br>
+              <span>Home Contact: {{employee.get_home_contact()}}</span><br>
+              <span>Email: {{employee.get_email()}}</span><br>
+              <h3>Remarks:</h3>
+              <span> {{employee.get_remarks()}}</span><br>
+
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+<td>
+    <form action="{{url_for('select_employee', id=employee.get_employee_id())}}" method="POST">
+    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal___{{employee.get_employee_id()}}">
+      Match
+    </button>
+
+
+    <div class="modal" id="myModal___{{employee.get_employee_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+
+          <div class="modal-header">
+            <h4 class="modal-title">Select Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            Match {{employee.get_first_name()}}{{employee.get_last_name()}}?
+          </div>
+
+
+          <div class="modal-footer">
+            <input type="submit" value="Confirm" class="btn btn-warning">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+<a href="/retrieveListings" class="btn btn-secondary">Back</a>
+</div>
+</main>
+{% endblock %}

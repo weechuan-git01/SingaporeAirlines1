@@ -1,0 +1,145 @@
+{% extends "base3.html" %}
+{% block title %}Company Home{% endblock %}
+{% block content %}
+
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Welcome, {{company_name}}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
+            <span data-feather="calendar"></span>
+            This week
+          </button>
+        </div>
+      </div>
+    <a href="/createListing/{{company_id}}" class="btn btn-secondary">Create Listing</a>
+    <h2 class="display-4">Current Listings</h2>
+    <div>
+    {% if count == 0 %}
+    <p>You no listings.</p>
+    {% elif count == 1 %}
+    <p>You have 1 listing.</p>
+    {% else %}
+    <p>You have {{ count }} listings.</p>
+    {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Job Title</th>
+        <th>No. of Hires</th>
+        <th>Position Required</th>
+        <th>Remarks</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for listing in listings_list %}
+      <tr>
+        <td>{{ listing.get_job_title() }}</td>
+        <td>{{ listing.get_no_of_hires() }}</td>
+        {% if listing.get_position_required() == 'A' %}
+        <td>Admin</td>
+        {% elif listing.get_position_required() == 'P' %}
+        <td>Pilot</td>
+        {% elif listing.get_position_required() == 'C' %}
+        <td>Crew</td>
+        {% elif listing.get_position_required() == 'M' %}
+        <td>Maintenance</td>
+        {% elif listing.get_position_required() == 'F' %}
+        <td>Flights</td>
+        {% endif %}
+<td>
+    <form>
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal__{{listing.get_listing_no()}}">
+      Details
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal__{{listing.get_listing_no()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">{{ listing.get_job_title() }}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+              <h3>Job Information</h3>
+              <span>Company: {{listing.get_company()}}</span><br>
+              <span>Job Title: {{listing.get_job_title()}}</span><br>
+              <span>No of Hires: {{listing.get_no_of_hires()}}</span><br>
+              <span>Job Description: {{listing.get_job_description()}}</span><br>
+              <span>Job Requirements: {{listing.get_job_requirements()}}</span><br>
+              <h3>Position Required</h3>
+            {% if listing.get_position_required() == 'A' %}
+            <span>Admin</span><br>
+            {% elif listing.get_position_required() == 'P' %}
+            <span>Pilot</span><br>
+            {% elif listing.get_position_required() == 'C' %}
+            <span>Crew</span><br>
+            {% elif listing.get_position_required() == 'M' %}
+            <span>Maintenance</span><br>
+            {% elif listing.get_position_required() == 'F' %}
+            <span>Flights</span><br>
+            {% endif %}
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+<td><a href="/updateListing/{{listing.get_listing_no()}}" class="btn btn-warning">Update</a></td>
+<td>
+    <form action="{{url_for('delete_listing', id=listing.get_listing_no())}}" method="POST">
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {#user.get_first_name()#} {#user.get_last_name()#}?');">-->
+    <!-- Button to Open the Modal -->
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{listing.get_listing_no()}}">
+      Delete
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal_{{listing.get_listing_no()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Are you sure you want to delete this listing?
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <input type="submit" value="Delete" class="btn btn-danger">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</main>
+{% endblock %}

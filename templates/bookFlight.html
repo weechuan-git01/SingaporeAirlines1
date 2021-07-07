@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Singapore Airlines - Book Ticket{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<section class="section-gap banner-area relative" style="padding: 100px;">
+<div class="container">
+<h1 class="display-4">Book Ticket</h1>
+
+<form method="POST" action="">
+    <div class="form-group">
+        {{render_field(form.departure_country, class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{render_field(form.arrival_country, class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{render_field(form.return_date, class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{render_field(form.flight_class, class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{render_field(form.adults, class="form-control")}}
+    </div>
+    <div class="form-group">
+        {{render_field(form.children, class="form-control")}}
+    </div>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+</div>
+</section>
+{% endblock %}
