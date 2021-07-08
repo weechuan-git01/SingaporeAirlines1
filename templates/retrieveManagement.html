@@ -1,0 +1,143 @@
+{% extends "base2.html" %}
+{% block title %}Singapore Airlines - Retrieve Particulars{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<h1 class="display-4">Retrieve Passengers Particulars</h1>
+<div>
+    {% if count == 0 %}
+    <p>There are no users.</p>
+    {% elif count == 1 %}
+    <p>There is 1 user.</p>
+    {% else %}
+    <p>There are {{ count }} users.</p>
+    {% endif %}
+</div>
+<div class="dropdown">
+  <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Filter
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <a class="dropdown-item" href="/retrieveManagement">All</a>
+    <a class="dropdown-item" href="/completedFilter">Completed</a>
+    <a class="dropdown-item" href="/incompletedFilter">Incompleted</a>
+  </div>
+</div>
+
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {#user.get_first_name()#} {#user.get_last_name()#}?');">-->
+    <!-- Button to Open the Modal -->
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>NRIC</th>
+        <th>Phone Number</th>
+        <th>Flight Number</th>
+        <th>Seat Number</th>
+        <th>Remarks</th>
+
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for passenger in passengers_list %}
+
+      <tr>
+        <td>{{ passenger.get_passenger_id() }}</td>
+        <td>{{ passenger.get_first_name() }}</td>
+        <td>{{ passenger.get_last_name() }}</td>
+        <td>{{ passenger.get_nric() }}</td>
+        <td>{{ passenger.get_phone_no() }}</td>
+        <td>{{ passenger.get_flight_no() }}</td>
+        <td>{{ passenger.get_seat_no() }}</td>
+        <td>{% if passenger.get_health_declaration() == "N" or passenger.get_pcr_test() == "N" or passenger.get_pre_book() == "N" %}
+            <b><font color="red">Incompleted</font></b>
+            {% else %}
+            {% endif %} </td>
+
+
+
+
+<td>
+  <form>
+<!--            <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {#user.get_first_name()#} {#user.get_last_name()#}?');">-->
+    <!-- Button to Open the Modal -->
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal__{{passenger.get_passenger_id()}}">
+      View More
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal__{{passenger.get_passenger_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">View More</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <b>First Name</b>
+            <p>{{ passenger.get_first_name() }}</p>
+            <b>Last Name</b>
+            <p>{{ passenger.get_last_name() }}</p>
+            <b>NRIC</b>
+            <p>{{ passenger.get_nric() }}</p>
+            <b>Phone No.</b>
+            <p>{{ passenger.get_phone_no() }}</p>
+            <b>Email</b>
+            <p>{{ passenger.get_email() }}</p>
+            <b>Flight No.</b>
+            <p>{{ passenger.get_flight_no() }}</p>
+            <b>Seat No.</b>
+            <p>{{ passenger.get_seat_no() }}</p>
+            <b>Gender</b>
+            <p>{{ passenger.get_gender() }}</p>
+            <b>Completed Health Declaration?</b>
+            {% if passenger.get_health_declaration() == "N" %}
+            <p><font color="red"> No </font></p>
+            {% elif passenger.get_health_declaration() == "Y" %}
+            <p>Yes</p>
+            {% endif %}
+            <b>Submitted Results of PCR Test?</b>
+            {% if passenger.get_pcr_test() == "N" %}
+            <p><font color="red"> No </font></p>
+            {% elif passenger.get_pcr_test() == "Y" %}
+            <p>Yes</p>
+            {% endif %}
+            <b>Pre-booked PCR Test?</b>
+            {% if passenger.get_pre_book() == "N" %}
+            <p><font color="red"> No </font></p>
+            {% elif passenger.get_pre_book() == "Y" %}
+            <p>Yes</p>
+            {% endif %}
+            <p>{{ passenger.get_remarks() }}</p>
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+     </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+</main>
+{% endblock %}

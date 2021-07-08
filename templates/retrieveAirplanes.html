@@ -1,0 +1,146 @@
+{% extends "base2.html" %}
+{% block title %}Singapore Airlines - Retrieve Airplanes{% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+    {% for airplane in airplanes_list %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% if airplane.get_date_diff() >= 90 %}
+    {% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span>{{ message }} {{airplane.get_airplane_id()}}</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endif %}
+    {% endwith %}
+    {% endfor %}
+
+    <h1 class="display-4">Retrieve Airplanes</h1>
+    <div>
+        {% if count == 0 %}
+        <p>There are no airplanes.</p>
+        {% elif count == 1 %}
+        <p>There is 1 airplane.</p>
+        {% else %}
+        <p>There are {{ count }} airplanes.</p>
+        {% endif %}
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Airplane ID</th>
+                <th>Tail Number</th>
+                <th>Operation Status</th>
+                <th>Model</th>
+                <th>Airline</th>
+                <th>Hanger</th>
+                <th>Remarks</th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for airplane in airplanes_list %}
+            <tr>
+                <td>{{ airplane.get_airplane_id() }}</td>
+                <td>{{ airplane.get_tail_number() }}</td>
+                {% if airplane.get_operation_status() == "Green" %}
+                <td><img style="width: 25%; height: auto" id="green" src="static/images/green dot.png"></td>
+                {% else %}
+                <td><img style="width: 25%; height: auto" id="red" src="static/images/red dot.png"></td>
+                {% endif %}
+                <td>{{ airplane.get_model() }}</td>
+                <td>{{ airplane.get_airline() }}</td>
+                {% if airplane.get_hanger() == "SG" %}
+                <td>Changi Airport</td>
+                {% else %}
+                <td>Alice Spring</td>
+                {% endif %}
+                <td>{{ airplane.get_remarks() }}</td>
+                <td><a href="/updateAirplane/{{airplane.get_airplane_id()}}" class="btn btn-warning">Update</a></td>
+
+                <!-- Maintenance Modal-->
+                <td>
+                    <button type="button" class="btn btn-success" data-toggle="modal"
+                            data-target="#AdditionalDetails_{{airplane.get_airplane_id()}}">
+                        Maintenance
+                    </button>
+
+                    <!-- The Modal -->
+                    <div class="modal" id="AdditionalDetails_{{airplane.get_airplane_id()}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Maintenance</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                    Last maintenance is on {{airplane.get_last_maintenance()}}.
+
+                                </div>
+
+
+                                <div class="modal-body">
+                                    Person-In-Charge: {{airplane.get_in_charge()}}
+                                </div>
+
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <a href="/updateMaintenance/{{airplane.get_airplane_id()}}" class="btn btn-warning">Update
+                                        Maintenance</a>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </td>
+
+                <!-- Delete Modal -->
+                <td>
+                    <!--form action="{{url_for('delete_airplane', id=airplane.get_airplane_id())}}" method="POST">
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{airplane.get_airplane_id()}}">
+                        Delete
+                      </button>
+
+                      <div class="modal" id="myModal_{{airplane.get_airplane_id()}}">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+
+                            <div class="modal-header">
+                              <h4 class="modal-title">Delete Confirmation</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <div class="modal-body">
+                              Are you sure you want to delete {{airplane.get_model()}} {{airplane.get_tail_number()}}?
+                            </div>
+
+                            <div class="modal-footer">
+                              <input type="submit" value="Delete" class="btn btn-danger">
+                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </form-->
+                </td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% endblock %}
+

@@ -1,0 +1,36 @@
+{% extends "update_base.html" %}
+{% block title %}Singapore Airlines - Update Airplane{% endblock %}
+  	{% block navbar %}
+		{% include 'includes/_navbar2.html' %}
+	{% endblock %}
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<h1 class="display-4">Update Airplane</h1>
+
+<form method="POST" action="">
+  <div class="form-group">
+    {{ render_field(form.tail_number, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.operation_status, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.model, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.airline, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.hanger, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div id="prof">
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div>
+
+  <input style="margin-top: 2%" type="submit" value="Submit" class="btn btn-primary"/>
+</form>
+</main>
+{% endblock %}

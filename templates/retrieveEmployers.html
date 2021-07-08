@@ -1,0 +1,111 @@
+{% extends "base2.html" %}
+{% block title %}Singapore Airlines - Retrieve Employers{% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<h1 class="display-4">Retrieve Employers</h1>
+<div>
+    {% if count == 0 %}
+    <p>There are no employers.</p>
+    {% elif count == 1 %}
+    <p>There is 1 employer.</p>
+    {% else %}
+    <p>There are {{ count }} employers.</p>
+    {% endif %}
+</div>
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Company Name</th>
+        <th>Employer No.</th>
+        <th>No. of Listings</th>
+        <th>Remarks</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for employer in employers_list %}
+      <tr>
+        <td>{{ employer.get_company_name() }}</td>
+        <td>{{ employer.get_employer_id() }}</td>
+        <td>{{ employer.get_no_of_listings() }}</td>
+        <td>{{ employer.get_remarks() }}</td>
+<td>
+    <form>
+
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal__{{employer.get_employer_id()}}">
+      Details
+    </button>
+
+
+    <div class="modal" id="myModal__{{employer.get_employer_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">{{employer.get_company_name()}}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+              <h3>Company Information</h3>
+              <span><img src="{{employer.get_company_logo()}}"></span><br>
+              <span>Company Name: {{employer.get_company_name()}}</span><br>
+              <span>ID: {{employer.get_employer_id()}}</span><br>
+              <span>Company Location: {{employer.get_company_location()}}</span><br>
+              <span>Establishment Date: {{employer.get_establishment_date()}}</span><br>
+              <h3>Remarks:</h3>
+              <span> {{employer.get_remarks()}}</span><br>
+          </div>
+
+
+          <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+          <td><a href="/updateEmployer/{{employer.get_employer_id()}}" class="btn btn-warning">Update</a></td>
+
+<td>
+    <form action="{{url_for('delete_employer', id=employer.get_employer_id())}}" method="POST">
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{employer.get_employer_id()}}">
+      Delete
+    </button>
+
+
+    <div class="modal" id="myModal_{{employer.get_employer_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <div class="modal-body">
+            Are you sure you want to delete {{employer.get_company_name()}}?
+          </div>
+
+
+          <div class="modal-footer">
+            <input type="submit" value="Delete" class="btn btn-danger">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</main>
+{% endblock %}

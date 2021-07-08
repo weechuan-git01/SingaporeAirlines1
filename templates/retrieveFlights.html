@@ -1,0 +1,421 @@
+{% extends "base2.html" %}
+{% block title %}Singapore Airlines - Retrieve Flights{% endblock %}
+
+{% block content %}
+<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+<h1 class="display-4">Retrieve Flights</h1>
+<div>
+    <table class="table table-default">
+        <thead>
+        <tr>
+            <th>Flight Number</th>
+            <th>Departure Date</th>
+            <th>To</th>
+            <th>Profit or Loss</th>
+            <th>Fly</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for flight in flights_list %}
+        {% if flight.get_fly() == 'Y' %}
+        <tr>
+            <td>{{ flight.get_flight_number() }}</td>
+            <td>{{ flight.get_departure_date() }}</td>
+            <td>{{ flight.get_arrival_country() }}</td>
+            {% if flight.get_arrival_country() == 'Hong Kong' %}
+                {% if hongkong_calculations < -100 %}
+                <td><font color="green"><b>ALERT!</b><br>${{ hongkong_calculations }}</font></td>
+                {% elif hongkong_calculations > -100 %}
+                <td><font color="green"><b>PROFIT!</b><br>${{ hongkong_calculations }}</font></td>
+                {% endif %}
+            {% elif flight.get_arrival_country() == 'Taipei' %}
+                {% if taiwan_calculations < -100 %}
+                <td><font color="green"><b>ALERT!</b><br>${{ taiwan_calculations }}</font></td>
+                {% elif taiwan_calculations > -100 %}
+                <td><font color="green"><b>PROFIT!</b><br>${{ taiwan_calculations }}</font></td>
+                {% endif %}
+            {% elif flight.get_arrival_country() == 'Jakarta' %}
+                {% if malaysia_calculations < -100 %}
+                <td><font color="green"><b>ALERT!</b><br>${{ malaysia_calculations }}</font></td>
+                {% elif malaysia_calculations > -100 %}
+                <td><font color="green"><b>PROFIT!</b><br>${{ malaysia_calculations }}</font></td>
+                {% endif %}
+            {% elif flight.get_arrival_country() == 'London' %}
+                {% if london_calculations < -100 %}
+                <td><font color="green"><b>ALERT!</b><br>${{ london_calculations }}</font></td>
+                {% elif london_calculations > -100 %}
+                <td><font color="green"><b>PROFIT!</b><br>${{ london_calculations }}</font></td>
+                {% endif %}
+            {% endif %}
+            {% if flight.get_fly() == 'Y' %}
+            <td><font color="green"><b>Flying</b></font></td>
+            {% else %}
+            <td><font color="red"><b>Cancelled</b></font></td>
+            {% endif %}
+
+            <td>
+               <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal___{{flight.get_flight_id()}}">
+                  View
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal___{{flight.get_flight_id()}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h1 class="modal-title">View Flight Details</h1>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <p><b>Flight Number: </b><br>
+                                    {{flight.get_flight_number()}}</p>
+                                <p><b>From: </b><br>
+                                    {{flight.get_departure_country()}}</p>
+                                <p><b>To: </b><br>
+                                    {{flight.get_arrival_country()}}</p>
+                                <p><b>Departure Date: </b><br>
+                                    {{flight.get_departure_date()}}</p>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif hongkong_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ hongkong_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif taiwan_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ taiwan_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif malaysia_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ malaysia_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif hongkong_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ hongkong_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif taiwan_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ taiwan_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif malaysia_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ malaysia_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif hongkong_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ hongkong_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif taiwan_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ taiwan_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif malaysia_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ malaysia_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif hongkong_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ hongkong_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif taiwan_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ taiwan_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif malaysia_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ malaysia_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ hongkong_calculations }}</font></p>
+                                        {% elif hongkong_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ hongkong_calculations }}</font></p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taiwan' %}
+                                        {% if taiwan_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ taiwan_calculations }}</font></p>
+                                        {% elif taiwan_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ taiwan_calculations }}</font></p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Malaysia' %}
+                                        {% if malaysia_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ malaysia_calculations }}</font></p>
+                                        {% elif malaysia_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ malaysia_calculations }}</font></p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <p><b>The flight will be carried out.</b></p>
+                                {% if flight.get_flight_type() == 'Y' %}
+                                <p><b>This is a transit flight.</b></p>
+                                {% else %}
+                                <p><b>This is a direct flight.</b></p>
+                                {% endif %}
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td><a href="/updateFlight/{{flight.get_flight_id()}}" class="btn btn-warning">Update</a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td>{{ flight.get_flight_number() }}</td>
+            <td>{{ flight.get_arrival_country() }}</td>
+            <td><font color="red"><b>Cancelled</b></font></td>
+            <td></td>
+            <td></td>
+
+            <td>
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal__{{flight.get_flight_id()}}">
+                  View
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal__{{flight.get_flight_id()}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h1 class="modal-title">View Flight Details</h1>
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <p><b>Flight Number:</b><br>
+                                    {{flight.get_flight_number()}}</p>
+                                <p><b>Departure Country:</b><br>
+                                    {{flight.get_departure_country()}}</p>
+                                <p><b>Destination:</b><br>
+                                    {{flight.get_arrival_country()}}</p>
+                                <p><b>Departure Date:</b><br>
+                                    {{flight.get_departure_date()}}</p>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif hongkong_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ hongkong_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif taiwan_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ taiwan_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_rebooked_list|length == 0 %}
+                                        <p><b>Number of rebooked:</b><br>0</p>
+                                        {% elif malaysia_rebooked_list|length == 1 %}
+                                        <p><b>Number of rebooked:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of rebooked:</b><br>{{ malaysia_rebooked_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif hongkong_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ hongkong_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif taiwan_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ taiwan_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_postpones_list|length == 0 %}
+                                        <p><b>Number of postpones:</b><br>0</p>
+                                        {% elif malaysia_postpones_list|length == 1 %}
+                                        <p><b>Number of postpones:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of postpones:</b><br>{{ malaysia_postpones_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif hongkong_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ hongkong_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif taiwan_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ taiwan_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_flying_list|length == 0 %}
+                                        <p><b>Number of passengers flying:</b><br>0</p>
+                                        {% elif malaysia_flying_list|length == 1 %}
+                                        <p><b>Number of passengers flying:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Number of passengers flying:</b><br>{{ malaysia_flying_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif hongkong_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ hongkong_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taipei' %}
+                                        {% if taiwan_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif taiwan_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ taiwan_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Jakarta' %}
+                                        {% if malaysia_tickets_list|length == 0 %}
+                                        <p><b>Total number of passengers:</b><br>0</p>
+                                        {% elif malaysia_tickets_list|length == 1 %}
+                                        <p><b>Total number of passengers:</b><br>1</p>
+                                        {% else %}
+                                        <p><b>Total number of passengers:</b><br>{{ malaysia_tickets_list|length }}</p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    {% if flight.get_arrival_country() == 'Hong Kong' %}
+                                        {% if hongkong_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ hongkong_calculations }}</font></p>
+                                        {% elif hongkong_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ hongkong_calculations }}</font></p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Taiwan' %}
+                                        {% if taiwan_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ taiwan_calculations }}</font></p>
+                                        {% elif taiwan_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ taiwan_calculations }}</font></p>
+                                        {% endif %}
+                                    {% elif flight.get_arrival_country() == 'Malaysia' %}
+                                        {% if malaysia_calculations < -100 %}
+                                        <p><font color="green"><b>ALERT!</b><br>${{ malaysia_calculations }}</font></p>
+                                        {% elif malaysia_calculations > -100 %}
+                                        <p><font color="green"><b>PROFIT!</b><br>${{ malaysia_calculations }}</font></p>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <p><b>The flight has been cancelled.</b></p>
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td>
+        </tr>
+        {% endif %}
+
+
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</main>
+{% endblock %}
+
+

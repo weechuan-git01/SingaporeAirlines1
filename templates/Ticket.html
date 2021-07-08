@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Singapore Airlines - Tickets Available{% endblock %}
+
+{% block content %}
+<h1 class="display-4">Tickets Available</h1>
+<div>
+    <table class="table table-default">
+        <tbody>
+        {% for flight in flights_list %}
+        {% if flight.get_fly() == 'Y' %}
+        <tr>
+            <p class="border">
+                Flight Number: {{flight.get_flight_number()}}<br>
+                From: {{flight.get_departure_country()}}<br>
+                To: {{flight.get_arrival_country()}}<br>
+                Departure Date: {{flight.get_departure_date()}}<br>
+            </p>
+        </tr>
+        {% else %}
+        <tr>
+            <p class="border">
+                Flight Number: {{flight.get_flight_number()}}<br>
+                From: {{flight.get_departure_country()}}<br>
+                To: {{flight.get_arrival_country()}}<br>
+                Departure Date: {{flight.get_departure_date()}}<br>
+                <b><font color="red">Cancelled</font></b><br>
+            </p>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
