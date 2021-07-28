@@ -4,6 +4,7 @@ from wtforms.widgets import PasswordInput
 from wtforms.fields.html5 import DateField, EmailField
 from wtforms.validators import email_validator, Email, ValidationError
 from datetime import date
+from flask_wtf import RecaptchaField
 
 
 def only_alp(form, field):
@@ -177,15 +178,18 @@ class RegisterForm(Form):
                            [validators.DataRequired(), validators.EqualTo('confirm')],
                            widget=PasswordInput(hide_value=False))
     confirm = StringField('Repeat Password')
+    recaptcha = RecaptchaField()
 
 
 class LoginForm(Form):
     login_id = StringField('Login id', [validators.DataRequired(), validators.Length(min=1, max=150)])
     password = StringField('Password', [validators.DataRequired()], widget=PasswordInput(hide_value=False))
+    recaptcha = RecaptchaField()
 
 
 class ForgetPassword(Form):
     login_id = StringField('Login id', [validators.DataRequired(), validators.Length(min=1, max=150)])
+    recaptcha = RecaptchaField()
 
 
 class FilterStatus(Form):

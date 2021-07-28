@@ -56,6 +56,9 @@
 <!--                                    <label for="password"><i class="fas fa-lock"></i></label>-->
                                     <input type="password" name="password" placeholder="Password" id="password" required><div class="msg">{{ msg }}</div>
                                 </div>
+                                <div>
+                                    {{ render_field(form.recaptcha) }}
+                                </div>
                                 <button type="submit" class="btn btn-theme" style="background-color: #5369f8; border-color: #5369f8; color: #fff">Login</button>
                                 <a href="/forgetPassword" class="forgot-link float-right text-primary" style="float:right;">Forgot password?</a>
                             </form>
@@ -88,5 +91,6 @@
     <!-- Row -->
 </div>
 
-
 {% endblock %}
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>

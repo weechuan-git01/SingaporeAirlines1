@@ -9,6 +9,8 @@ from flask import Flask, render_template, request, redirect, url_for, abort, sen
 from flask_mysqldb import MySQL
 from cryptography.fernet import Fernet
 
+from flask_wtf import RecaptchaField
+
 from Forms import CreateEmployeeForm, CreateEmployerForm, CreateListingForm, CreateAirplanesForm, CreatePassengerForm, \
     CreateFlightForm, CreateMaintenanceForm, RegisterForm, LoginForm, FilterStatus, FilterRole, ChangePassword, \
     BookTicketForm, ForgetPassword
@@ -22,6 +24,8 @@ app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'static/employer_logo'
 app.secret_key = 'any_random_string'
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6LfgRjMbAAAAAFB5kW4klbRpXJPT8ijgxO0FEP-p'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6LfgRjMbAAAAAJ3oWWbsFfB4Wh3ojAaAtZwZSsW_'
 
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
